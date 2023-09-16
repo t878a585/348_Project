@@ -29,10 +29,11 @@ When documents are given to us to fill out, we should use the preexisting format
 
 In every document, in left-justified non-bolded text at the top of the document, three lines will be needed:
 
-\<Company_Name\>
-\<Date\>
-\<Document Creator\>
-
+`
+<Company_Name>
+<Date>
+<Document Creator>
+`
 After these three initial lines, there should be an empty line and a line that follows in bolded 13 point Arial font. This will be the title of the document. After the title, there should be an empty line and then the document text. The empty line (and the following text) should be in 11 point non-bolded Arial.
 
 #### Contextual
@@ -45,7 +46,7 @@ Markdown doesn't allow for the same formatting control that Microsoft Word and G
 
 #### Required
 
-- There must only be one heading at the single '#' level (Ex, '# This is my Title')
+- There must only be one heading at the single '#' level (Ex. '# This is my Title')
 - The heading described above should be the title
 - The title must be less than three words
 - A line should be present after the title that follows this format: `LAST UPDATED: <month>-<day>-<year>`
