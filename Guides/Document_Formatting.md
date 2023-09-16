@@ -48,6 +48,8 @@ After these three initial lines, there should be an empty line and a line that f
 
 Markdown doesn't allow for the same formatting control that Microsoft Word and Google Docs does. It is oftentimes used for How-To Guides or simple documentation. In general, all guides should be in Markdown. Outside of that, it will depend on the context.
 
+**If you have not used Markdown before, I would suggest using this site to play around with it:** [rentry.co](https://rentry.co/)
+
 #### Required
 
 - There must only be one heading at the single '#' level (Ex. '# This is my Title')
