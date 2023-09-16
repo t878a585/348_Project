@@ -1,6 +1,6 @@
 # Note Taking Guide
 
-**LAST UPDATED 9-15-2023**
+**LAST UPDATED 9-16-2023**
 
 ## Preface
 
@@ -30,4 +30,10 @@ In the course of our meetings, we will likely need to make use of the whiteboard
 
 ### Using the Github Website
 
+1. Open our repository page
+2. Open the notes folder
+3. Press the button with the three dots in the upper right hand corner
+4. Press upload files button
+5. Either drag and drop your notes file or press "choose your files"
 
+![A gif showing this process](/Images/Upload_Notes.gif)
