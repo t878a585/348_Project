@@ -41,6 +41,8 @@ After these three initial lines, there should be an empty line and a line that f
 #### Contextual
 
 - If deemed necessary given the amount of pages, include the page number on the right hand side of the header.
+- Lines can be tacked on after the first three lines and its blank line providing more information (Place, members present, etc.) if a blank line (the blank line should be 13 Arial) is added after this new section.
+![Photo of what the above would look like](/Images/Extra_Line_Example.png)
 
 ### Markdown
 
