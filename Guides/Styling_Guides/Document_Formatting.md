@@ -29,11 +29,13 @@ When documents are given to us to fill out, we should use the preexisting format
 
 In every document, in left-justified non-bolded text at the top of the document, three lines will be needed:
 
-`
+
+```
 <Company_Name>
-<Date>
-<Document Creator>
-`
+<Month>-<Day>-<Year>
+<Original_Author>
+```
+
 After these three initial lines, there should be an empty line and a line that follows in bolded 13 point Arial font. This will be the title of the document. After the title, there should be an empty line and then the document text. The empty line (and the following text) should be in 11 point non-bolded Arial.
 
 #### Contextual

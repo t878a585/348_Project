@@ -9,7 +9,7 @@ This is presently a living document. After multiple note taking sessions, we wil
 ## Requirements
 All notes will go in the `Notes` folder. They should be labeled in the following format:
 
-notes_<month>-<day>-<year>.<extension>
+notes_\<month\>-\<day\>-\<year\>.\<extension\>
 
 For example: `notes_9-15-2023.docx`
 
