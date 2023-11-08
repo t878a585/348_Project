@@ -15,4 +15,4 @@ Public Methods
  * if an error was reported.
  */
 
-long long int evaluate(std::list<Token> postfix_expression, ErrorReporter * error_reporter);
+long double evaluate(std::list<Token> postfix_expression, ErrorReporter * error_reporter);

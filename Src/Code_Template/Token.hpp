@@ -5,12 +5,12 @@ class Token {
         private:
                 //Is true if operator, false if operand
                 bool is_Operator;
-                long long int operand_Value;
+                long double operand_Value;
                 char operator_Value;
 
         public:
 
-                Token (long long int _operand_Value) {
+                Token (long double _operand_Value) {
                         is_Operator = false;
                         operand_Value = _operand_Value;
                 }
