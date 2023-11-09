@@ -23,6 +23,10 @@ class Token {
                 bool is_This_An_Operator() {
                         return is_Operator;
                 }
+
+		char get_Operator() { return operator_Value; }
+
+		long double get_Operand() { return operand_Value; }
 };
 
 
