@@ -89,6 +89,6 @@ class IOHandler {
 
 		std::cout << "Exiting Calculator..." << std::endl;
 	}
-}
+};
 
 #endif
