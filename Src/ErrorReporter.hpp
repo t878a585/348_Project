@@ -9,7 +9,20 @@
 
 class ErrorReporter {
 	private:
-
+		
   	public:
+		void add_error(char * module_Name, char * error_Description){
+			
+		}
+		int get_error_count(){
+			
+		}
+		void remove_errors(){
+			
+		}
+		char * get_error_string(int index){
+			
+		}
+		
 };
 #endif
