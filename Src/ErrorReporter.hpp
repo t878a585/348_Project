@@ -7,4 +7,9 @@
 #ifndef ERRORREPORTER_HPP
 #define ERRORREPORTER_HPP
 
+class ErrorReporter {
+	private:
+
+  public:
+
 #endif
