@@ -8,7 +8,9 @@
 #define INFIX_TO_POSTFIX_HPP
 class InfixToPostfix {
   private:
-
+    
   public:
+    std::list<Token> convert(char * infix_expression, ErrorReporter * error_reporter){
+    }
 };
 #endif
