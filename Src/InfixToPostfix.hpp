@@ -6,6 +6,9 @@
 
 #ifndef INFIX_TO_POSTFIX_HPP
 #define INFIX_TO_POSTFIX_HPP
+
+#include <stack>
+
 class InfixToPostfix {
   private:
     
