@@ -10,6 +10,6 @@
 class ErrorReporter {
 	private:
 
-  public:
-
+  	public:
+};
 #endif
