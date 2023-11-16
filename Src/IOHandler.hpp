@@ -71,7 +71,7 @@ class IOHandler {
 			std::string stripped_Input = remove_Newlines(input);
 			std::list<Token> postfix_Tokens = infixToPostfix.convert(stripped_Input.c_str(), &error_reporter);
 			
-			if (errorReporter.get_error_count > 0) {
+			if (errorReporter.get_error_count() > 0) {
 				print_And_Clear_Errors();
 				continue;
 			}
@@ -79,7 +79,7 @@ class IOHandler {
 			long double result = postfixEvaluator.evaluate(postfix_Tokens, &error_reporter);
 
 			
-			if (errorReporter.get_error_count > 0) {
+			if (errorReporter.get_error_count() > 0) {
 				print_And_Clear_Errors();
 				continue;
 			}
