@@ -4,7 +4,7 @@
 
 
 calculator: main.o
-	g++ main.cpp -o calculator
+	g++ main.o -o calculator
 
 clean:
 	rm *.o calculator
