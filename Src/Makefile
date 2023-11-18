@@ -4,7 +4,9 @@
 
 
 calculator: main.o
-	gcc main.cpp -o calculator
+	g++ main.cpp -o calculator
 
-clean
+clean:
 	rm *.o calculator
+
+.PHONY: clean
