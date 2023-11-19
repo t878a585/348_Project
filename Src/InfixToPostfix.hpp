@@ -8,7 +8,7 @@
 #define INFIX_TO_POSTFIX_HPP
 
 #include "../Token.hpp"
-#include <list>
+#include <vector> 
 #include <cstring>
 #include <string>
 #include <stack>
@@ -16,7 +16,7 @@
 class Tokenizer {
 	private:
 
-	std::list<Token> tokens;
+	std::vector<Token> tokens;
 
 	bool is_Operator(char character) {
 		if (character == '+' || character == '-' || character == '/' || character == '*' || character == '(' || character == ')' || character == '^' || character == '%') {
@@ -69,7 +69,7 @@ class Tokenizer {
 		tokenize(input);
 	}
 
-	std::list<Token> get_Tokens() {return tokens;}
+	std::list<vector> get_Tokens() {return tokens;}
 
 
 };
@@ -116,8 +116,8 @@ class InfixToPostfix {
     std::list<Token> convert(char * infix_expression, ErrorReporter * error_reporter){
 	Tokenizer tokenizer(infix_Expression);
 	std::stack<Token> operator_Stack;
-	std::list<Token> output;
-	std::list<Token> infix_Tokens = tokenizer.get_Tokens();
+	std::vector<Token> output;
+	std::vector<Token> infix_Tokens = tokenizer.get_Tokens();
 	
 	int infix_Token_Count = infix_Tokens.size();
 
