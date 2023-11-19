@@ -10,7 +10,7 @@
 #include "./Token.hpp"
 #include "./ErrorReporter.hpp"
 
-#include <list>
+#include <vector>
 #include <stack>
 
 class PostfixEvaluator {
@@ -66,11 +66,13 @@ class PostfixEvaluator {
 
 	public:
 	
-	long double evaluate(std::list<Token> postfix_Expression, ErrorReporter * error_reporter) {
+	long double evaluate(std::vector<Token> postfix_Expression, ErrorReporter * error_reporter) {
 		int token_Count = postfix_Expression.size();
 
 		for (int i = 0; i < token_Count; i++) {
-			Token token = postfix_Expression.pop_front();
+			
+			Token token = postfix_Expression.front();
+			postfix_Expression.erase(postfix_Expression.begin());
 			
 			if (token.is_This_An_Operator()) {
 				perform_Operation(token.get_Operator());
