@@ -7,7 +7,7 @@
 #ifndef ERRORREPORTER_HPP
 #define ERRORREPORTER_HPP
 
-#include <list>
+#include <vector> 
 #include <cstring>
 
 class ErrorReporter {
@@ -18,9 +18,9 @@ class ErrorReporter {
 			char * error_Description;
 		};
 
-		std::list<struct error_Report> error_List;
+		std::vector<struct error_Report> error_List;
   	public:
-		void add_error(char * module_Name, char * error_Description){
+		void add_error(char * module_Name, char * error_Description) {
 			struct error_Report;
 			error_Report.module_Name = strdup(module_Name);
 			error_Report.error_Description = strdup(error_Description);
@@ -28,7 +28,7 @@ class ErrorReporter {
 			error_List.push_back(error_Report);
 		}
 
-		int get_error_count(){
+		int get_error_count() {
 			return error_List.size();
 		}
 
