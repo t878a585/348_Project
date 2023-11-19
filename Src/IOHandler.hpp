@@ -45,7 +45,14 @@ class IOHandler {
 	}
 	
 	std::string remove_Newlines(std::string s) {
-		//Someone define this
+		int length = s.length();
+		std::string new_String;
+		
+		for (int i = 0; i < length; i++) {
+			if (s[i] != '\n') new_String += s[i];
+		}
+
+		return new_String;
 	}
 
 	bool print_And_Clear_Errors() {
