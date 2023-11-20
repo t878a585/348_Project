@@ -153,6 +153,11 @@ class InfixToPostfix {
 		}
 	}
 
+	while (!operator_Stack.empty()) {
+		output.push_back(operator_Stack.top());
+		operator_Stack.pop();
+	}
+
 	return output;
     }
 };
