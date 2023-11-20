@@ -12,6 +12,7 @@
 
 #include <vector>
 #include <stack>
+#include <cmath>
 
 class PostfixEvaluator {
 	private:
@@ -20,8 +21,12 @@ class PostfixEvaluator {
 
 	//If error occurred, return false, otherwise true
 	bool perform_Operation(char operation, ErrorReporter * error_reporter) {
-		long double operand_Two = number_Stack.pop();
-		long double operand_One = number_Stack.pop();
+		long double operand_Two = number_Stack.top();
+		number_Stack.pop();
+
+		long double operand_One = number_Stack.top();
+		number_Stack.pop();
+
 		long double result; 
 
 		switch (operation) {
@@ -35,7 +40,7 @@ class PostfixEvaluator {
 
 			case '/':
 				if (operand_Two == 0.0) {
-					error_reporter->add_error("PostfixEvaluator", "Division by zero is invalid.")
+					error_reporter->add_error("PostfixEvaluator", "Division by zero is invalid.");
 					return false;
 				}
 
@@ -47,16 +52,16 @@ class PostfixEvaluator {
 			break;
 
 			case '^': 
-				result = operand_One ^ operand_Two;
+				result = pow(operand_One, operand_Two);
 			break;
 
 			case '%': 
 				if (operand_Two == 0.0) {
-					error_reporter.add_error("PostfixEvaluator", "Modulus by zero is invalid.");
+					error_reporter->add_error("PostfixEvaluator", "Modulus by zero is invalid.");
 					return false;
 				}
 				
-				result = operand_One % operand_Two;
+				result = fmod(operand_One, operand_Two);
 			break;
 		}
 
@@ -75,13 +80,15 @@ class PostfixEvaluator {
 			postfix_Expression.erase(postfix_Expression.begin());
 			
 			if (token.is_This_An_Operator()) {
-				perform_Operation(token.get_Operator());
+				perform_Operation(token.get_Operator(), error_reporter);
 			} else {
 				number_Stack.push(token.get_Operand());
 			}
 		}
 
-		return number_Stack.pop();
+		long double result = number_Stack.top();
+		number_Stack.pop();
+		return result;
 	}
 };
 

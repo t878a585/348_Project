@@ -55,7 +55,7 @@ class IOHandler {
 		return new_String;
 	}
 
-	bool print_And_Clear_Errors() {
+	void print_And_Clear_Errors() {
 		int error_Count = errorReporter.get_error_count();
 
 		for (int i = 0; i < error_Count; i++) {
@@ -67,6 +67,7 @@ class IOHandler {
 		}
 
 		errorReporter.remove_errors();
+
 	}
 	
 	public:
@@ -78,19 +79,19 @@ class IOHandler {
 		
 		while (1) {
 			std::cout << "Input your equation:";
-			std::getline(cin, input);
+			std::getline(std::cin, input);
 			
 			if (has_Q(input)) break;
 
 			std::string stripped_Input = remove_Newlines(input);
-			std::vector<Token> postfix_Tokens = infixToPostfix.convert(stripped_Input.c_str(), &error_reporter);
+			std::vector<Token> postfix_Tokens = infixToPostfix.convert(stripped_Input.c_str(), &errorReporter);
 			
 			if (errorReporter.get_error_count() > 0) {
 				print_And_Clear_Errors();
 				continue;
 			}
 
-			long double result = postfixEvaluator.evaluate(postfix_Tokens, &error_reporter);
+			long double result = postfixEvaluator.evaluate(postfix_Tokens, &errorReporter);
 
 			
 			if (errorReporter.get_error_count() > 0) {

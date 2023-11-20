@@ -9,6 +9,7 @@
 
 #include <vector> 
 #include <cstring>
+#include <cstdlib>
 
 class ErrorReporter {
 	private:
@@ -20,12 +21,12 @@ class ErrorReporter {
 
 		std::vector<struct error_Report> error_List;
   	public:
-		void add_error(char * module_Name, char * error_Description) {
-			struct error_Report;
-			error_Report.module_Name = strdup(module_Name);
-			error_Report.error_Description = strdup(error_Description);
+		void add_error(const char * module_Name, const char * error_Description) {
+			struct error_Report report;
+			report.module_Name = strdup(module_Name);
+			report.error_Description = strdup(error_Description);
 
-			error_List.push_back(error_Report);
+			error_List.push_back(report);
 		}
 
 		int get_error_count() {
@@ -36,24 +37,24 @@ class ErrorReporter {
 			int error_Count = get_error_count();
 
 			for (int i = 0; i < error_Count; i++) {
-				struct current_Error = error_List[i];
-				delete error_List.module_Name;
-				delete error_List.error_Description;
+				struct error_Report current_Error = error_List[i];
+				delete current_Error.module_Name;
+				delete current_Error.error_Description;
 			}
 
 			error_List.clear();
 		}
 
 		char * get_error_string(int index){
-			struct error_Report = error_List[index];
+			struct error_Report report = error_List[index];
 
-			int module_Name_Length = strlen(error_List.module_Name);
-			int error_Description_Length = strlen(error_List.error_Description);
-			char * error_String = malloc(sizeof(char) * (module_Name_Length + error_Description_Length + 3));
+			int module_Name_Length = strlen(report.module_Name);
+			int error_Description_Length = strlen(report.error_Description);
+			char * error_String = (char *) malloc(sizeof(char) * (module_Name_Length + error_Description_Length + 3));
 
-			strcpy(error_String, error_List.module_Name);
+			strcpy(error_String, report.module_Name);
 			strcat(error_String, ":");
-			strcat(error_String, error_List.error_Description);
+			strcat(error_String, report.error_Description);
 			strcat(error_String, "\n");
 
 			return error_String;

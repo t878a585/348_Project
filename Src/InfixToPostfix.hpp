@@ -7,7 +7,7 @@
 #ifndef INFIX_TO_POSTFIX_HPP
 #define INFIX_TO_POSTFIX_HPP
 
-#include "../Token.hpp"
+#include "./Token.hpp"
 #include <vector> 
 #include <cstring>
 #include <string>
@@ -35,10 +35,10 @@ class Tokenizer {
 	}
 
 	void fix_False_Negative_Operators() {
-
+		return;
 	}
 	
-	void tokenize(char * input) {
+	void tokenize(const char * input) {
 		int length = strlen(input);
 
 		for (int i = 0; i < length;) {
@@ -65,11 +65,11 @@ class Tokenizer {
 
 	public:
 
-	Tokenizer(char * input) {	
+	Tokenizer(const char * input) {	
 		tokenize(input);
 	}
 
-	std::list<vector> get_Tokens() {return tokens;}
+	std::vector<Token> get_Tokens() {return tokens;}
 
 
 };
@@ -100,9 +100,10 @@ class InfixToPostfix {
 
 			case '(':
 			case ')':
-				return 5
+				return 5;
 			break;
 		}
+		return -1;
 	}
 
 	//return -1 (op1 < op2)
@@ -113,8 +114,8 @@ class InfixToPostfix {
 	}
     
   public:
-    std::list<Token> convert(char * infix_expression, ErrorReporter * error_reporter){
-	Tokenizer tokenizer(infix_Expression);
+    std::vector<Token> convert(const char * infix_expression, ErrorReporter * error_reporter){
+	Tokenizer tokenizer(infix_expression);
 	std::stack<Token> operator_Stack;
 	std::vector<Token> output;
 	std::vector<Token> infix_Tokens = tokenizer.get_Tokens();
@@ -125,18 +126,28 @@ class InfixToPostfix {
 		if (!( infix_Tokens[i].is_This_An_Operator() )) {
 			output.push_back(infix_Tokens[i]);
 		} else {
-			char oper = infix_Tokens[i].get_Operator;
+			char oper = infix_Tokens[i].get_Operator();
 			
 			if (oper == '(') {
-				operator_Stack.push_back(infix_Tokens[i]);
+				operator_Stack.push(infix_Tokens[i]);
 			} else if (oper == ')') {
 				while (operator_Stack.top().get_Operator() != '(') {
-					output.push_back(operator_Stack.pop());
+					output.push_back(operator_Stack.top());
+					operator_Stack.pop();
 				}
 
 				operator_Stack.pop();
 			} else {
-				
+				if (!operator_Stack.empty() && precedence_Compare(oper, operator_Stack.top().get_Operator()) <= 0) {
+					while (!operator_Stack.empty() && precedence_Compare(oper, operator_Stack.top().get_Operator()) <= 0) {
+						output.push_back(operator_Stack.top());
+						operator_Stack.pop();
+					}
+
+					operator_Stack.push(infix_Tokens[i]);
+				} else {
+					operator_Stack.push(infix_Tokens[i]);
+				}
 			}
 
 		}
