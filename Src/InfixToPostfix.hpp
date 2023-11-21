@@ -35,50 +35,40 @@ class Tokenizer {
 	}
 
 	void fix_False_Negative_Operators() {
-		return;
 		std::vector<Token> new_Tokens;
 		std::stack<Token> holding_Stack;
 
 		for (int i = tokens.size() - 1; i >= 0 ; i--) holding_Stack.push(tokens[i]);
 
-		Token t1 = holding_Stack.top();
-		holding_Stack.pop();
-
-		if (t1.is_This_An_Operator() && t1.get_Operator() == '-') {
+		while (!holding_Stack.empty() && holding_Stack.size() >= 3) {
+			Token t1 = holding_Stack.top();
+			holding_Stack.pop();
+			
 			Token t2 = holding_Stack.top();
 			holding_Stack.pop();
 
-			new_Tokens.push_back(-1.0 * t2.get_Operand());
-		} else {
-			new_Tokens.push_back(t1);
-		}
-
-		while (!holding_Stack.empty()) {
-			t1 = holding_Stack.top();
+			Token t3 = holding_Stack.top();
 			holding_Stack.pop();
 
-			Token t2 = holding_Stack.top();
-			holding_Stack.pop();
-
-			if (t1.is_This_An_Operator() && t2.is_This_An_Operator() && t2.get_Operator() == '-') {
-				Token t3 = holding_Stack.top();
-				holding_Stack.pop();
-
+			if (t1.is_This_An_Operator() && t2.is_This_An_Operator() && t2.get_Operator() == '-' && !t3.is_This_An_Operator()) {
 				new_Tokens.push_back(t1);
-				new_Tokens.push_back(Token(-1.0 * t3.get_Operand()));
-				continue;
+				new_Tokens.push_back(Token(t3.get_Operand() * -1.0));
+			} else {
+				new_Tokens.push_back(t1);
+				holding_Stack.push(t3);
+				holding_Stack.push(t2);
 			}
-
-			new_Tokens.push_back(t1);
-
-			new_Tokens.push_back(t2);	
 		}
-		
+
+		while (!holding_Stack.empty()) {new_Tokens.push_back(holding_Stack.top()); holding_Stack.pop();}
+
 		tokens = new_Tokens;
 	}
 	
 	void tokenize(const char * input) {
 		int length = strlen(input);
+		
+		tokens.push_back(Token('('));
 
 		for (int i = 0; i < length;) {
 			if (!is_Decimal(input[i]) && !is_Operator(input[i])) {i++; continue;}
@@ -98,6 +88,8 @@ class Tokenizer {
 
 			tokens.push_back(std::stold(decimal_String));
 		}
+
+		tokens.push_back(Token(')'));
 		
 		fix_False_Negative_Operators();
 	}

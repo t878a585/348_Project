@@ -28,7 +28,7 @@ class IOHandler {
 		std::cout << "Welcome to the Arithmetic Expression Evaluator" << std::endl;
 		std::cout << "To exit, type q or Q at any time and hit enter" << std::endl;
 		std::cout << "Alternatively, press control-c" << std::endl;
-		std::cout << "Whenever prompted with \"Input your equations:,\"" << std::endl;
+		std::cout << "Whenever prompted with \"Input your equations:\"" << std::endl;
 		std::cout << "you may enter in your equation and hit enter to evaluate it." << std::endl;
 	}
 
