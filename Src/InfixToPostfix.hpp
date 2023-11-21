@@ -35,7 +35,45 @@ class Tokenizer {
 	}
 
 	void fix_False_Negative_Operators() {
-		return;
+		std::vector<Token> new_Tokens;
+		std::stack<Token> holding_Stack;
+
+		for (int i = tokens.size() - 1; i >= 0 ; i--) holding_Stack.push(tokens[i]);
+
+		Token t1 = holding_Stack.top();
+		holding_Stack.pop();
+
+		if (t1.is_This_An_Operator() && t1.get_Operator() == '-') {
+			Token t2 = holding_Stack.top();
+			holding_Stack.pop();
+
+			new_Tokens.push_back(-1.0 * t2.get_Operand());
+		} else {
+			new_Tokens.push_back(t1);
+		}
+
+		while (!holding_Stack.empty()) {
+			t1 = holding_Stack.top();
+			holding_Stack.pop();
+
+			Token t2 = holding_Stack.top();
+			holding_Stack.pop();
+
+			if (t1.is_This_An_Operator() && t2.is_This_An_Operator() && t2.get_Operator() == '-') {
+				Token t3 = holding_Stack.top();
+				holding_Stack.pop();
+
+				new_Tokens.push_back(t1);
+				new_Tokens.push_back(Token(-1.0 * t3.get_Operand()));
+				continue;
+			}
+
+			new_Tokens.push_back(t1);
+
+			new_Tokens.push_back(t2);	
+		}
+		
+		tokens = new_Tokens;
 	}
 	
 	void tokenize(const char * input) {
@@ -130,6 +168,7 @@ class InfixToPostfix {
 			
 			if (oper == '(') {
 				operator_Stack.push(infix_Tokens[i]);
+
 			} else if (oper == ')') {
 				while (operator_Stack.top().get_Operator() != '(') {
 					output.push_back(operator_Stack.top());

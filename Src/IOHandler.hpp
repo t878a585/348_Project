@@ -99,7 +99,7 @@ class IOHandler {
 				continue;
 			}
 
-			std::cout << result << std::endl;
+			std::cout << std::fixed << result << std::endl;
 		}
 
 		std::cout << "Exiting Calculator..." << std::endl;
