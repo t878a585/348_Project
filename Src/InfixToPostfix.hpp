@@ -35,6 +35,7 @@ class Tokenizer {
 	}
 
 	void fix_False_Negative_Operators() {
+		return;
 		std::vector<Token> new_Tokens;
 		std::stack<Token> holding_Stack;
 
@@ -138,7 +139,7 @@ class InfixToPostfix {
 
 			case '(':
 			case ')':
-				return 5;
+				return -1;
 			break;
 		}
 		return -1;
