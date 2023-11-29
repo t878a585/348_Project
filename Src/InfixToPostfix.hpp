@@ -19,6 +19,7 @@ class Tokenizer {
 	std::vector<Token> tokens;
 
 	bool is_Operator(char character) {
+		//Allows tokenizer to identify if the current character is an operator
 		if (character == '+' || character == '-' || character == '/' || character == '*' || character == '(' || character == ')' || character == '^' || character == '%') {
 			return true;
 		}
@@ -27,19 +28,23 @@ class Tokenizer {
 	}
 
 	bool is_Decimal(char character) {
+		// Check if the character is a digit (48 - 57 is the decimal range for ascii digits)
 		if (character >= 48 && character <= 57) return true;
-
+		
+		// Check if the character is a decimal point
 		if (character == '.') return true;
 
+		// If the character is neither a digit nor a decimal point, return false
 		return false;
 	}
 
 	void fix_False_Negative_Operators() {
 		std::vector<Token> new_Tokens;
 		std::stack<Token> holding_Stack;
-
+		
+		//Push tokens on in reverse order so that they are popped in order
 		for (int i = tokens.size() - 1; i >= 0 ; i--) holding_Stack.push(tokens[i]);
-
+		
 		while (!holding_Stack.empty() && holding_Stack.size() >= 3) {
 			Token t1 = holding_Stack.top();
 			holding_Stack.pop();
@@ -49,19 +54,29 @@ class Tokenizer {
 
 			Token t3 = holding_Stack.top();
 			holding_Stack.pop();
-
+			
+			// Check for the following string of tokens <any_operator> <negative_operator> <operand>
+			// If it matches this format, output the following tokens <any_operator> -<operand>
 			if (t1.is_This_An_Operator() && t2.is_This_An_Operator() && t2.get_Operator() == '-' && !t3.is_This_An_Operator()) {
 				new_Tokens.push_back(t1);
+				//Minus token is absorbed through negation of the operand
 				new_Tokens.push_back(Token(t3.get_Operand() * -1.0));
+
 			} else {
+				//If tokens don't match pattern, output the top token to the output
+				//Put the remaining tokens back on the stack in the old order
 				new_Tokens.push_back(t1);
 				holding_Stack.push(t3);
 				holding_Stack.push(t2);
 			}
 		}
-
+		
+		// There will be potentially two remaining tokens that need to be processed. Pop these directly
+		// to the output. These can't be matched by our replacement pattern because there aren't at
+		// least three tokens.
 		while (!holding_Stack.empty()) {new_Tokens.push_back(holding_Stack.top()); holding_Stack.pop();}
 
+		// Replace the old tokens with our new processed tokens
 		tokens = new_Tokens;
 	}
 	
@@ -170,14 +185,22 @@ class InfixToPostfix {
 
 				operator_Stack.pop();
 			} else {
+				// Check if the operator stack is not empty and the precedence of the current operator is less than or equal to the precedence of the operator on top of the stack
 				if (!operator_Stack.empty() && precedence_Compare(oper, operator_Stack.top().get_Operator()) <= 0) {
+					// Pop all operators with greater or equal precedence at the top of
+					// the stack
 					while (!operator_Stack.empty() && precedence_Compare(oper, operator_Stack.top().get_Operator()) <= 0) {
 						output.push_back(operator_Stack.top());
 						operator_Stack.pop();
 					}
-
+					
+					//Push the new operator to the operator stack
 					operator_Stack.push(infix_Tokens[i]);
 				} else {
+					
+					//If the operator stack is empty or there isn't anything with greater
+					// or equal precedence at the top of the stack, push the current token 
+					// onto the stack.
 					operator_Stack.push(infix_Tokens[i]);
 				}
 			}
