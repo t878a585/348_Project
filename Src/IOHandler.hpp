@@ -12,6 +12,7 @@
 #include "./Token.hpp"
 #include "./InfixToPostfix.hpp"
 #include "./PostfixEvaluator.hpp"
+#include "./testcases.hpp"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -55,24 +56,12 @@ class IOHandler {
 		return new_String;
 	}
 
-	void print_And_Clear_Errors() {
-		int error_Count = errorReporter.get_error_count();
-
-		for (int i = 0; i < error_Count; i++) {
-			char * error_String = errorReporter.get_error_string(i);
-			
-			std::cout << error_String << std::endl;
-
-			delete error_String;
-		}
-
-		errorReporter.remove_errors();
-
-	}
+	
 	
 	public:
 	
 	void execute() {
+		runTests(); //RUNS TEST CASES. COMMENT OUT BEFORE PROD
 		start_Message();
 		
 		std::string input;
@@ -87,7 +76,7 @@ class IOHandler {
 			std::vector<Token> postfix_Tokens = infixToPostfix.convert(stripped_Input.c_str(), &errorReporter);
 			
 			if (errorReporter.get_error_count() > 0) {
-				print_And_Clear_Errors();
+				errorReporter.print_And_Clear_Errors();
 				continue;
 			}
 
@@ -95,7 +84,7 @@ class IOHandler {
 
 			
 			if (errorReporter.get_error_count() > 0) {
-				print_And_Clear_Errors();
+				errorReporter.print_And_Clear_Errors();
 				continue;
 			}
 
