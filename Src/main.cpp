@@ -4,7 +4,7 @@
  * Timo Aranjo, Victor Maduka, Ellia Morse, Deborah Onuosa
  */
 
-//Include the header file "IOHandler.hpp" to makek the declarations in IOHandler.hpp avaialbe for use in this file
+//Include the header file "IOHandler.hpp" to make the declarations in IOHandler.hpp avaialbe for use in this file
 #include "IOHandler.hpp"
 
 //The main function, where the execution begins
