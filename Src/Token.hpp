@@ -1,9 +1,3 @@
-/*
- * BSD 3-Clause License
- * Copyright (c) 2023, Alexandra Stratton, Riley Sirimongkhon-Dyck,
- * Timo Aranjo, Victor Maduka, Ellia Morse, Deborah Onuosa
- */
-
 //Checks if the TOKEN_HPP macro has not been defined before in the code to prevent multiple inclusion
 #ifndef TOKEN_HPP
 //If TOKEN_HPP is not defined, define it to avoid multiple inclusion of the header file

@@ -1,9 +1,3 @@
-/*
- * BSD 3-Clause License
- * Copyright (c) 2023, Alexandra Stratton, Riley Sirimongkhon-Dyck,
- * Timo Aranjo, Victor Maduka, Ellia Morse, Deborah Onuosa
- */
-
 //Include the header file "IOHandler.hpp" to make the declarations in IOHandler.hpp avaialbe for use in this file
 #include "IOHandler.hpp"
 

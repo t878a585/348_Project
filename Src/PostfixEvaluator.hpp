@@ -1,21 +1,15 @@
-/*
- * BSD 3-Clause License
- * Copyright (c) 2023, Alexandra Stratton, Riley Sirimongkhon-Dyck,
- * Timo Aranjo, Victor Maduka, Ellia Morse, Deborah Onuosa
- */
-
 #ifndef POSTFIXEVALUATOR_HPP
 #define POSTFIXEVALUATOR_HPP
 
 #include "./Token.hpp"
 #include "./ErrorReporter.hpp"
 
-
 #include <vector>
 #include <stack>
 #include <cmath>
 #include <iostream>
 
+//Class for taking postfix output from InfixToPostfix class and evaluating it using a stack
 class PostfixEvaluator {
   private:
   
@@ -49,7 +43,7 @@ class PostfixEvaluator {
         error_reporter->add_error("PostfixEvaluator", "Not enough operands for operation.");
         return false;
     }
-
+    
     long double operand_Two = number_Stack.top();
     number_Stack.pop();
 
@@ -62,32 +56,32 @@ class PostfixEvaluator {
       case '+': 
         
         result = operand_One + operand_Two;
-        std::cout << "Operand 1: " << operand_One << "Operand 2: " << operand_Two << "Result: " << result << std::endl;
+        //std::cout << " Operand 1: " << operand_One << " Operand 2: " << operand_Two << " Result: " << result << " Operator: " << operation << std::endl;
       break;
 
       case '-': 
         result = operand_One - operand_Two;
-        std::cout << "Operand 1: " << operand_One << "Operand 2: " << operand_Two << "Result: " << result << std::endl;
+          //std::cout << " Operand 1: " << operand_One << " Operand 2: " << operand_Two << " Result: " << result << " Operator: " << operation << std::endl;
       break;
 
       case '/':
         if (operand_Two == 0.0) {
-          error_reporter->add_error("PostfixEvaluator", "Division by zero is invalid.");
+          //error_reporter->add_error("PostfixEvaluator", "Division by zero is invalid.");
           return false;
         }
         
         result = operand_One / operand_Two;
-        std::cout << "Operand 1: " << operand_One << "Operand 2: " << operand_Two << "Result: " << result << std::endl;
+        //std::cout << " Operand 1: " << operand_One << " Operand 2: " << operand_Two << " Result: " << result << " Operator: " << operation << std::endl;
       break;
 
       case '*': 
         result = operand_One * operand_Two;
-        std::cout << "Operand 1: " << operand_One << "Operand 2: " << operand_Two << "Result: " << result << std::endl;
+        std::cout << " Operand 1: " << operand_One << " Operand 2: " << operand_Two << " Result: " << result << " Operator: " << operation << std::endl;
       break;
 
       case '^': 
         result = pow(operand_One, operand_Two);
-        std::cout << "Operand 1: " << operand_One << "Operand 2: " << operand_Two << "Result: " << result << std::endl;
+        //std::cout << " Operand 1: " << operand_One << " Operand 2: " << operand_Two << " Result: " << result << " Operator: " << operation << std::endl;
       break;
 
       case '%': 
@@ -95,12 +89,21 @@ class PostfixEvaluator {
           error_reporter->add_error("PostfixEvaluator", "Modulus by zero is invalid.");
           return false;
         }else{
-          result = fmod(operand_One, operand_Two);
-          std::cout << "Operand 1: " << operand_One << "Operand 2: " << operand_Two << "Result: " << result << std::endl;
+          result = fmodf(operand_One, operand_Two);
+          if(operand_One < 0 && operand_Two < 0) {
+              result *= 1;
+          }else if (operand_One < 0 && operand_Two > 0){
+              result *= -1;
+          }else if (operand_One > 0 && operand_Two < 0){
+              result *= -1;
+          }
+          
+          //std::cout << " Operand 1: " << operand_One << " Operand 2: " << operand_Two << " Result: " << result << " Operator: " << operation << std::endl;
         }
       break;
     }
-
+    
+    
     number_Stack.push(result);
     return true;
   }
@@ -125,6 +128,7 @@ class PostfixEvaluator {
         number_Stack.push(token.get_Operand());
       }
     }
+      
 
     if (!number_Stack.empty()) {
         long double result = number_Stack.top();

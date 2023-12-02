@@ -1,10 +1,3 @@
-/*
- * BSD 3-Clause License
- * Copyright (c) 2023, Alexandra Stratton, Riley Sirimongkhon-Dyck,
- * Timo Aranjo, Victor Maduka, Ellia Morse, Deborah Onuosa
- */
-
-
 //Include guard to prevent multiple inclusion of the IOHANDLER_HPP header file
 #ifndef IOHANDLER_HPP
 //If IOHANDLER_HPP is not defined, define it to avoid multiple inclusion of the header file

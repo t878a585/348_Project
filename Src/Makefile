@@ -6,7 +6,7 @@
 calculator: main.o
 	g++ main.o -g3 -o calculator
 
-main.o: main.cpp ErrorReporter.hpp  InfixToPostfix.hpp  IOHandler.hpp  PostfixEvaluator.hpp  Token.hpp testcases.hpp
+main.o: main.cpp ErrorReporter.hpp  InfixToPostfix.hpp  IOHandler.hpp  PostfixEvaluator.hpp  Token.hpp testCases.hpp
 	g++ main.cpp -g3 -c -o main.o
 
 clean:

@@ -1,9 +1,3 @@
-/*
- * BSD 3-Clause License
- * Copyright (c) 2023, Alexandra Stratton, Riley Sirimongkhon-Dyck,
- * Timo Aranjo, Victor Maduka, Ellia Morse, Deborah Onuosa
- */
-
 #ifndef INFIX_TO_POSTFIX_HPP
 #define INFIX_TO_POSTFIX_HPP
 
@@ -12,11 +6,17 @@
 #include <cstring>
 #include <string>
 #include <stack>
-
+#include <iostream>
 class Tokenizer {
   private:
 
   std::vector<Token> tokens;
+
+  bool is_Unary_Operator(char character) {
+      // Identify unary operators
+      return (character == '+' || character == '-');
+  }
+
 
   bool is_Operator(char character) {
     //Allows tokenizer to identify if the current character is an operator
@@ -79,40 +79,63 @@ class Tokenizer {
     // Replace the old tokens with our new processed tokens
     tokens = new_Tokens;
   }
-
-  void tokenize(const char * input) {
+  bool is_Valid_Character(char character) {
+      // Allow digits, operators, and whitespaces
+      return (isdigit(character) || is_Operator(character) || isspace(character));
+  }
+  void tokenize(const char * input, ErrorReporter *error_reporter) {
+    int operandCount = 0;
+    int operatorCount = 0;
+         
     int length = strlen(input);
 
     tokens.push_back(Token('('));
 
+    bool isUnary = true;  // Assume the first operator is unary
+
     for (int i = 0; i < length;) {
+      if (!is_Valid_Character(input[i])) {
+          error_reporter->add_error("InfixToPostfix", "Invalid Character");
+      }
+
       if (!is_Decimal(input[i]) && !is_Operator(input[i])) {i++; continue;}
-
       if (is_Operator(input[i])) {
-        tokens.push_back(Token(input[i]));
-        i++;
-        continue;
+              if (input[i] == '(') {
+                  operatorCount++;
+              } else if (input[i] == ')') {
+                  operatorCount--;
+              } else {
+                  operatorCount++;
+              }
+              tokens.push_back(Token(input[i]));
+              i++;
+              continue;
+          }
+
+          std::string decimal_String;
+
+          while (is_Decimal(input[i])) {
+              decimal_String.push_back(input[i]);
+              i++;
+          }
+
+          tokens.push_back(std::stold(decimal_String));
+          operandCount++;
       }
 
-      std::string decimal_String;
+      tokens.push_back(Token(')'));
+      fix_False_Negative_Operators();
 
-      while (is_Decimal(input[i])) {
-        decimal_String.push_back(input[i]);
-        i++;
+      // Check if there are more operands than operators
+      if (operandCount > operatorCount*2 && operatorCount > 0) {
+          error_reporter->add_error("InfixToPostfix", "Not enough operators."); //This needs to be fixed 
       }
-
-      tokens.push_back(std::stold(decimal_String));
-    }
-
-    tokens.push_back(Token(')'));
-
-    fix_False_Negative_Operators();
+    
   }
-
   public:
 
-  Tokenizer(const char * input) {	
-    tokenize(input);
+  Tokenizer(const char * input, ErrorReporter * error_reporter) {	
+    tokenize(input, error_reporter);
   }
 
   std::vector<Token> get_Tokens() {return tokens;}
@@ -162,66 +185,88 @@ class InfixToPostfix {
     return (op == '+' || op == '-');
   }
   public:
-    std::vector<Token> convert(const char * infix_expression, ErrorReporter * error_reporter){
-  Tokenizer tokenizer(infix_expression);
-  std::stack<Token> operator_Stack;
-  std::vector<Token> output;
-  std::vector<Token> infix_Tokens = tokenizer.get_Tokens();
-  
-  int infix_Token_Count = infix_Tokens.size();
+std::vector<Token> convert(const char *infix_expression, ErrorReporter *error_reporter) {
+    Tokenizer tokenizer(infix_expression, error_reporter);
+    std::stack<Token> operator_Stack;
+    std::vector<Token> output;
+    std::vector<Token> infix_Tokens = tokenizer.get_Tokens();
 
-  for (int i = 0; i < infix_Token_Count; i++) {
-    if (!( infix_Tokens[i].is_This_An_Operator() )) {
-      output.push_back(infix_Tokens[i]);
-    } else {
-      char oper = infix_Tokens[i].get_Operator();
+    int open_Parentheses_Count = 0;
+    int close_Parentheses_Count = 0;
 
-      if (oper == '(') {
-        operator_Stack.push(infix_Tokens[i]);
-
-      } else if (oper == ')') {
-        while (!operator_Stack.empty() && operator_Stack.top().get_Operator() != '(') {
-          output.push_back(operator_Stack.top());
-          operator_Stack.pop();
+    for (const Token &token : infix_Tokens) {
+        if (token.is_This_An_Operator()) {
+            if (token.get_Operator() == '(') {
+                open_Parentheses_Count++;
+            } else if (token.get_Operator() == ')') {
+                close_Parentheses_Count++;
+            }
         }
+    }
 
-        if (operator_Stack.empty()) {
-          // Handle the case where there is no matching '('
-          error_reporter->add_error("InfixToPostfix", "Unmatched parentheses.");
-          return output;  // or handle the error in a way that makes sense for your program
-        }
+    if (open_Parentheses_Count != close_Parentheses_Count) {
+        error_reporter->add_error("InfixToPostfix", "Unmatched parentheses.");
+        return output;  // or handle the error in a way that makes sense for your program
+    }
 
-        // Pop the '(' from the stack
-        operator_Stack.pop();
-      } else {
-        // Check if the operator stack is not empty and the precedence of the current operator is less than or equal to the precedence of the operator on top of the stack
-        if (!operator_Stack.empty() && precedence_Compare(oper, operator_Stack.top().get_Operator()) <= 0) {
-          // Pop all operators with greater or equal precedence at the top of
-          // the stack
-          while (!operator_Stack.empty() && precedence_Compare(oper, operator_Stack.top().get_Operator()) <= 0) {
-            output.push_back(operator_Stack.top());
-            operator_Stack.pop();
-          }
+    int infix_Token_Count = infix_Tokens.size();
 
-          //Push the new operator to the operator stack
-          operator_Stack.push(infix_Tokens[i]);
+    for (int i = 0; i < infix_Token_Count; i++) {
+        if (!(infix_Tokens[i].is_This_An_Operator())) {
+            output.push_back(infix_Tokens[i]);
         } else {
+            char oper = infix_Tokens[i].get_Operator();
 
-          //If the operator stack is empty or there isn't anything with greater
-          // or equal precedence at the top of the stack, push the current token 
-          // onto the stack.
-          operator_Stack.push(infix_Tokens[i]);
+            if (oper == '(') {
+                operator_Stack.push(infix_Tokens[i]);
+            } else if (oper == ')') {
+                while (!operator_Stack.empty() && operator_Stack.top().get_Operator() != '(') {
+                    output.push_back(operator_Stack.top());
+                    operator_Stack.pop();
+                }
+
+                // Pop the '(' from the stack
+                operator_Stack.pop();
+            } else {
+                // Check if the operator is unary and handle it accordingly
+                if (is_Unary(oper)) {
+                    // Handle unary operator
+                    while (!operator_Stack.empty() && precedence_Compare(oper, operator_Stack.top().get_Operator()) <= 0) {
+                        output.push_back(operator_Stack.top());
+                        operator_Stack.pop();
+                    }
+                    operator_Stack.push(infix_Tokens[i]);  // Push the unary operator onto the stack
+                } else {
+                    // Check if the operator stack is not empty and the precedence of the current operator is less than or equal to the precedence of the operator on top of the stack
+                    if (!operator_Stack.empty() && precedence_Compare(oper, operator_Stack.top().get_Operator()) <= 0) {
+                        // Pop all operators with greater or equal precedence at the top of
+                        // the stack
+                        while (!operator_Stack.empty() && precedence_Compare(oper, operator_Stack.top().get_Operator()) <= 0) {
+                            output.push_back(operator_Stack.top());
+                            operator_Stack.pop();
+                        }
+
+                        // Push the new operator to the operator stack
+                        operator_Stack.push(infix_Tokens[i]);
+                    } else {
+                        // If the operator stack is empty or there isn't anything with greater
+                        // or equal precedence at the top of the stack, push the current token
+                        // onto the stack.
+                        operator_Stack.push(infix_Tokens[i]);
+                    }
+                }
+            }
         }
-      }
     }
-  }
 
-  while (!operator_Stack.empty()) {
-    output.push_back(operator_Stack.top());
-    operator_Stack.pop();
-  }
-
-  return output;
+    while (!operator_Stack.empty()) {
+        output.push_back(operator_Stack.top());
+        operator_Stack.pop();
     }
+
+    return output;
+}
+
+
 };
 #endif
