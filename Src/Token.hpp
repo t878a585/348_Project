@@ -3,6 +3,8 @@
 //If TOKEN_HPP is not defined, define it to avoid multiple inclusion of the header file
 #define TOKEN_HPP
 
+#include <string>
+
 //Definition of the Token class
 class Token {
   
@@ -33,6 +35,22 @@ class Token {
     bool is_This_An_Operator() const {
       //Return the value of is_Operator, indicating whether the Token represents an operator (true) or an operand (false)
       return is_Operator;
+    }
+
+    bool is_Operator_And_Is_Value(char val) {
+      return is_This_An_Operator() && operator_Value == val;
+    }
+
+    bool is_Operator_And_Has_Intersection(std::string s) {
+    	int s_Length = s.size();
+	
+	if (!is_This_An_Operator()) return false;
+
+	for (int i = 0; i < s_Length; i++) {
+		if (s[i] == operator_Value) return true;
+	}
+
+	return false;
     }
                 
   //Public method to get the value of the operator if the Token represents an operator     
