@@ -1,7 +1,3 @@
-/*
-This file is intended to process errors as they occur while  evaluating postfix expressions
-*/
-
 //Include guard to prevent multiple inclusion of the ERRORREPORTER_HPP header file
 #ifndef ERRORREPORTER_HPP
 //If ERRORREPORTER_HPP is not defined, define it to avoid multiple inclusion of the header file
@@ -12,6 +8,8 @@ This file is intended to process errors as they occur while  evaluating postfix 
 #include <cstring>
 //Include the cstdlib header file, providing funcions involving memory allocation and more
 #include <cstdlib>
+//Include the iostream header file, providing functionalities for input and output using streams
+#include <iostream>
 
 //Definition of the ErrorReporter class
 class ErrorReporter {
@@ -82,6 +80,15 @@ class ErrorReporter {
       strcat(error_String, "\n");
       //Returns the formatted error string
       return error_String;
+    }
+    //This function will print the first error in the vector error_List, it's a void function so it won't return anything
+    void print_first_error() {
+      //Declares a variable named first_Error which is a struct that initializes with the first element in the error_List array
+      struct error_Report first_Error = error_List[0];
+      //Uses standard output to print the error description stored in first_Error
+      //A newline is also printed using standard output
+      std::cout << first_Error.error_Description << "\n";
+        
     }
 
 };
