@@ -12,7 +12,6 @@
 //Include the PostfixEvaluator header file, which will allow the use of declarations and definition from that file
 #include "./PostfixEvaluator.hpp"
 
-#include "./testCases.hpp"
 //Include the iostream header file, providing functionalities for input and output using streams
 #include <iostream>
 //Include the string header file, providing functionalities for working with strings
@@ -77,12 +76,14 @@ class IOHandler {
   void print_And_Clear_Errors() {
     //Gets the current count of errors from the ErrorReporter
     int error_Count = errorReporter.get_error_count();
+    //Calls the print_first_error function from ErrorReproter.hpp to print the first error in the error_List
+    errorReporter.print_first_error();
     //Using a for loop it'll iterate through each error
     for (int i = 0; i < error_Count; i++) {
+
       //Gets the error string for the current error
       char * error_String = errorReporter.get_error_string(i);
-      //Prints the error string
-      std::cout << error_String << std::endl;
+
 
       //Free the memory allocated for the error string
       delete error_String;
@@ -91,12 +92,11 @@ class IOHandler {
     errorReporter.remove_errors();
 
   }
-  
+
 
   public:
   //This function is to execute the calculator, and start taking user input
   void execute() {
-    runTests();
     //Calls the start_message() function to display a welcome message and instructions for the user
     start_Message();
     //Declare a string variable to store user input
