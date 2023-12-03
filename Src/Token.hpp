@@ -2,12 +2,12 @@
 #ifndef TOKEN_HPP
 //If TOKEN_HPP is not defined, define it to avoid multiple inclusion of the header file
 #define TOKEN_HPP
-
+//Include the string header file, providing functionalities for working with strings
 #include <string>
 
 //Definition of the Token class
 class Token {
-  
+
   private:
     //Is true if operator, false if operand
     bool is_Operator;
@@ -38,23 +38,30 @@ class Token {
       //Return the value of is_Operator, indicating whether the Token represents an operator (true) or an operand (false)
       return is_Operator;
     }
-
+    //This function will return a boolean value
     bool is_Operator_And_Is_Value(char val) {
+      //Returns true if both conditons are true using AND operator (&&)
+      //The conditions are as follows:
+      //1)if val is an operator using the is_This_An_Operator function
+      //2) it checks to see if operator_Value is equal to val
       return is_This_An_Operator() && operator_Value == val;
     }
-
+    //This function returns a boolean value depending on if there is an intersection or not
     bool is_Operator_And_Has_Intersection(std::string s) {
-    	int s_Length = s.size();
-	
-	if (!is_This_An_Operator()) return false;
-
-	for (int i = 0; i < s_Length; i++) {
-		if (s[i] == operator_Value) return true;
-	}
-
-	return false;
+      //Gets the length of the input string
+      int s_Length = s.size();
+      //Checks to see if the current value is not an operator, if true it'll return false
+      if (!is_This_An_Operator()) return false;
+      //uses a for loop to iterate through each character in the input string
+      for (int i = 0; i < s_Length; i++) {
+        //Checks to see if the current value at the index i in the string is equal to the operator value
+        //If true it means there is an intersect and it'll return true
+        if (s[i] == operator_Value) return true;
+      }
+      //if there is no intersection then it'll return false
+      return false;
     }
-                
+
   //Public method to get the value of the operator if the Token represents an operator     
   char get_Operator() const {
     //Return the value of the operator
