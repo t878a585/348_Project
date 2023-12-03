@@ -40,7 +40,7 @@ class PostfixEvaluator {
   bool perform_Operation(char operation, ErrorReporter * error_reporter) {
     
     if (number_Stack.size() < 2) {
-        error_reporter->add_error("PostfixEvaluator", "Not enough operands for operation.");
+        error_reporter->add_error("PostfixEvaluator", "Not enough operands.");
         return false;
     }
     
@@ -54,34 +54,28 @@ class PostfixEvaluator {
 
     switch (operation) {
       case '+': 
-        
         result = operand_One + operand_Two;
-        //std::cout << " Operand 1: " << operand_One << " Operand 2: " << operand_Two << " Result: " << result << " Operator: " << operation << std::endl;
       break;
 
       case '-': 
         result = operand_One - operand_Two;
-          //std::cout << " Operand 1: " << operand_One << " Operand 2: " << operand_Two << " Result: " << result << " Operator: " << operation << std::endl;
       break;
 
       case '/':
         if (operand_Two == 0.0) {
-          //error_reporter->add_error("PostfixEvaluator", "Division by zero is invalid.");
+          error_reporter->add_error("PostfixEvaluator", "Division by zero is invalid.");
           return false;
         }
         
         result = operand_One / operand_Two;
-        //std::cout << " Operand 1: " << operand_One << " Operand 2: " << operand_Two << " Result: " << result << " Operator: " << operation << std::endl;
       break;
 
       case '*': 
         result = operand_One * operand_Two;
-        std::cout << " Operand 1: " << operand_One << " Operand 2: " << operand_Two << " Result: " << result << " Operator: " << operation << std::endl;
       break;
 
       case '^': 
         result = pow(operand_One, operand_Two);
-        //std::cout << " Operand 1: " << operand_One << " Operand 2: " << operand_Two << " Result: " << result << " Operator: " << operation << std::endl;
       break;
 
       case '%': 
@@ -97,8 +91,6 @@ class PostfixEvaluator {
           }else if (operand_One > 0 && operand_Two < 0){
               result *= -1;
           }
-          
-          //std::cout << " Operand 1: " << operand_One << " Operand 2: " << operand_Two << " Result: " << result << " Operator: " << operation << std::endl;
         }
       break;
     }
@@ -112,8 +104,8 @@ class PostfixEvaluator {
 
   long double evaluate(std::vector<Token> postfix_Expression, ErrorReporter * error_reporter) {
     if (!check_Unmatched_Parentheses(postfix_Expression, error_reporter)) {
-      // Do not proceed with evaluation if unmatched parentheses are detected
-      return 0.0; // You can choose an appropriate value to return in case of an error
+      
+      return 0.0; 
     }
     int token_Count = postfix_Expression.size();
 
