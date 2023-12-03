@@ -2,15 +2,20 @@
 #define INFIX_TO_POSTFIX_HPP
 
 #include "./Token.hpp"
+#include "./UnaryRewriter.hpp"
 #include <vector> 
 #include <cstring>
 #include <string>
 #include <stack>
 #include <iostream>
+
+
+
 class Tokenizer {
   private:
 
   std::vector<Token> tokens;
+
 
   bool is_Unary_Operator(char character) {
       // Identify unary operators
@@ -38,47 +43,12 @@ class Tokenizer {
     return false;
   }
 
-  void fix_False_Negative_Operators() {
-    std::vector<Token> new_Tokens;
-    std::stack<Token> holding_Stack;
-
-    //Push tokens on in reverse order so that they are popped in order
-    for (int i = tokens.size() - 1; i >= 0 ; i--) holding_Stack.push(tokens[i]);
-
-    while (!holding_Stack.empty() && holding_Stack.size() >= 3) {
-      Token t1 = holding_Stack.top();
-      holding_Stack.pop();
-
-      Token t2 = holding_Stack.top();
-      holding_Stack.pop();
-
-      Token t3 = holding_Stack.top();
-      holding_Stack.pop();
-
-      // Check for the following string of tokens <any_operator> <negative_operator> <operand>
-      // If it matches this format, output the following tokens <any_operator> -<operand>
-      if (t1.is_This_An_Operator() && t2.is_This_An_Operator() && t2.get_Operator() == '-' && !t3.is_This_An_Operator()) {
-        new_Tokens.push_back(t1);
-        //Minus token is absorbed through negation of the operand
-        new_Tokens.push_back(Token(t3.get_Operand() * -1.0));
-
-      } else {
-        //If tokens don't match pattern, output the top token to the output
-        //Put the remaining tokens back on the stack in the old order
-        new_Tokens.push_back(t1);
-        holding_Stack.push(t3);
-        holding_Stack.push(t2);
-      }
-    }
-
-    // There will be potentially two remaining tokens that need to be processed. Pop these directly
-    // to the output. These can't be matched by our replacement pattern because there aren't at
-    // least three tokens.
-    while (!holding_Stack.empty()) {new_Tokens.push_back(holding_Stack.top()); holding_Stack.pop();}
-
-    // Replace the old tokens with our new processed tokens
-    tokens = new_Tokens;
+  void fix_Unary_Operators(ErrorReporter * error_Reporter) {
+	UnaryRewriter ur(tokens,error_Reporter);
+	ur.fix();
+	tokens = ur.get_Tokens();
   }
+	
   bool is_Valid_Character(char character) {
       // Allow digits, operators, and whitespaces
       return (isdigit(character) || is_Operator(character) || isspace(character));
@@ -124,7 +94,7 @@ class Tokenizer {
       }
 
       tokens.push_back(Token(')'));
-      fix_False_Negative_Operators();
+      fix_Unary_Operators(error_reporter);
 
       // Check if there are more operands than operators
       if (operandCount > operatorCount*2 && operatorCount > 0) {

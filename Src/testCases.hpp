@@ -63,11 +63,11 @@ void runTests() {
   testInfixToPostfixAndEvaluate("2.5+2.5", 5); //Add-106
   
   testInfixToPostfixAndEvaluate("(2-(-3))", 5); //Sub-101
-  testInfixToPostfixAndEvaluate("-(2-(3))", -1);//Sub-102
+  testInfixToPostfixAndEvaluate("-(2-(3))", 1);//Sub-102
   testInfixToPostfixAndEvaluate("-(2-(-3))", -5); //Sub-103
   testInfixToPostfixAndEvaluate("3-2", 1); //Sub-104
   testInfixToPostfixAndEvaluate("2-0", 2); //Sub-105
-  testInfixToPostfixAndEvaluate("(-2)-(-3)", 6); //sub-106
+  testInfixToPostfixAndEvaluate("(-2)-(-3)", 1); //sub-106
   testInfixToPostfixAndEvaluate("5-2.5", 2.5);//Sub-107
   
   testInfixToPostfixAndEvaluate("(2*(-3))",-6); //Mult-101
