@@ -128,7 +128,7 @@ class Tokenizer {
 
       // Check if there are more operands than operators
       if (operandCount > operatorCount*2 && operatorCount > 0) {
-          error_reporter->add_error("InfixToPostfix", "Not enough operators."); //This needs to be fixed 
+          error_reporter->add_error("InfixToPostfix", "Not enough operators."); 
       }
     
   }
