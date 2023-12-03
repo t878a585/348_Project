@@ -31,6 +31,8 @@ class Token {
       //Set the value of the operator
       operator_Value = _operator_Value;
     }
+
+
     //Public method to check if the Token represents an operator
     bool is_This_An_Operator() const {
       //Return the value of is_Operator, indicating whether the Token represents an operator (true) or an operand (false)
